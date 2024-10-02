@@ -2,9 +2,8 @@ import { getKindeServerSession, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/
 import { redirect } from "next/navigation";
 
 const page = async () => {
- const { isAuthenticated, getUser} = getKindeServerSession();
+ const { isAuthenticated} = getKindeServerSession();
   const isUserAuthenticated = await isAuthenticated();
-  const user = await getUser();
 
 
   if (!isUserAuthenticated) {

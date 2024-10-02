@@ -38,14 +38,16 @@ const CreateCourse = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await fetch("/api/course", {
+      const response = await fetch("/api/courses", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
       });
-      console.log(await response.json());
+      const data = await response.json();
+      router.push(`/teacher/courses/${data.id}`);
+      toast.success("Course created")
     } catch {
       toast.error("An error occurred");
     }
