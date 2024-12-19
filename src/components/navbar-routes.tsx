@@ -1,16 +1,30 @@
 "use client";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import {
+  LoginLink,
+  LogoutLink,
+  useKindeBrowserClient,
+} from "@kinde-oss/kinde-auth-nextjs";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
+
 import { Button } from "./ui/button";
 import { LogOut } from "lucide-react";
-import Link from "next/link";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User, useUserStore } from "@/store/user";
+import { useEffect } from "react";
 
 const NavbarRoutes = () => {
   const { getUser } = useKindeBrowserClient();
-  const user = getUser();
   const pathname = usePathname();
-
+  const user = getUser();
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isPlayerPage = pathname?.startsWith("/chapter");
   return (
@@ -29,12 +43,31 @@ const NavbarRoutes = () => {
           </Button>
         </Link>
       )}
-      <Avatar>
-        <AvatarImage
-          src={user?.picture || "https://github.com/shadcn.png"}
-          alt="@shadcn"
-        />
-      </Avatar>
+
+      {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Avatar>
+                  <AvatarImage
+                    src={user.picture || "https://github.com/shadcn.png"}
+                    alt={user.given_name || "User"}
+                  />
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <LogoutLink>Logout</LogoutLink>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button size="sm" variant="default">
+              <LoginLink>Log in</LoginLink>
+            </Button>
+          )}
     </div>
   );
 };
