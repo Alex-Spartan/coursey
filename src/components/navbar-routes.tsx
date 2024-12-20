@@ -18,8 +18,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, useUserStore } from "@/store/user";
-import { useEffect } from "react";
 
 const NavbarRoutes = () => {
   const { getUser } = useKindeBrowserClient();
@@ -44,7 +42,7 @@ const NavbarRoutes = () => {
         </Link>
       )}
 
-      {user ? (
+      {user !== null ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>

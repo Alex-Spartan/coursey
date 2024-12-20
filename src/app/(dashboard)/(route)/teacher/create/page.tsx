@@ -18,6 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -27,6 +28,7 @@ const formSchema = z.object({
 
 const CreateCourse = () => {
   const router = useRouter();
+  const { getUser } = useKindeBrowserClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -38,14 +40,23 @@ const CreateCourse = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const user = getUser();
       const response = await fetch("/api/course", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify({...values, userId: user?.id }),
       });
-      console.log(await response.json());
+      const course = await response.json();
+      if (!response.ok) {
+        toast.error(course.error);
+        return;
+      }
+      toast.success("Course created successfully");
+      toast.success("Redirecting to course form");
+      router.push(`/create/course/${course.id}`);
+
     } catch {
       toast.error("An error occurred");
     }
