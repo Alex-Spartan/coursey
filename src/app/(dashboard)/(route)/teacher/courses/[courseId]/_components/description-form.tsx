@@ -5,39 +5,41 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { useRouter } from "next/navigation";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
-type TitleFormProps = {
+type DescriptionFormProps = {
   initialData: {
-    title: string;
+    description: string | null;
   };
   courseId: string;
 };
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  description: z.string().min(1, {
+    message: "description is required",
   }),
 });
 
-
-const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
+const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData,
+    defaultValues: {
+        description: initialData.description || "",
+    },
   });
 
   const { isValid, isSubmitting } = form.formState;
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
+    values: z.infer<typeof formSchema>
+  ) => {
     toggleEdit();
     try {
       const response = await fetch(`/api/course`, {
@@ -45,7 +47,7 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...values, id: courseId}),
+        body: JSON.stringify({ ...values, id: courseId }),
       });
       const course = await response.json();
       if (!response.ok) {
@@ -53,44 +55,38 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
         return;
       }
       toast.success("Course updated successfully");
-      router.refresh();
     } catch {
       toast.error("An error occurred");
     }
   };
 
-
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course title
+        Course description
         <Button variant="ghost" onClick={toggleEdit}>
           {!isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit title
+              Edit description
             </>
           )}
         </Button>
       </div>
       {isEditing ? (
-        <div className=" text-sm mt-2">{initialData.title}</div>
+        <div className={cn("text-sm mt-2", !initialData.description && "text-slate-500 italic")}>{initialData.description || "No Description"}</div>
       ) : (
-        // <Form {...form}>
-          <FormProvider {...form}>
+        <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField 
+            <FormField
               control={form.control}
-              name="title"
+              name="description"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input 
-                      disabled={isEditing}
-                      {...field}
-                    />
+                    <Textarea  disabled={isEditing} {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -101,11 +97,10 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
               </Button>
             </div>
           </form>
-          </FormProvider>
-        // </Form>
+        </FormProvider>
       )}
     </div>
   );
 };
 
-export default TitleForm;
+export default DescriptionForm;
