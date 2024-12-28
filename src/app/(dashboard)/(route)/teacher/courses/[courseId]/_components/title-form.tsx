@@ -65,20 +65,17 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
       <div className="font-medium flex items-center justify-between">
         Course title
         <Button variant="ghost" onClick={toggleEdit}>
-          {!isEditing ? (
+          {isEditing ? (
             <>Cancel</>
           ) : (
             <>
-              <Pencil className="h-4 w-4 mr-2" />
+              <Pencil className="h-4 w-4" />
               Edit title
             </>
           )}
         </Button>
       </div>
       {isEditing ? (
-        <div className=" text-sm mt-2">{initialData.title}</div>
-      ) : (
-        // <Form {...form}>
           <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField 
@@ -102,7 +99,8 @@ const TitleForm = ({ initialData, courseId }: TitleFormProps) => {
             </div>
           </form>
           </FormProvider>
-        // </Form>
+      ) : (
+        <div className=" text-sm mt-2">{initialData.title}</div>
       )}
     </div>
   );

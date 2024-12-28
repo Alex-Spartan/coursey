@@ -1,41 +1,44 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  FormField,
+  FormItem,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
-type DescriptionFormProps = {
+type PriceFormProps = {
   initialData: {
-    description: string | null;
+    price: number | null;
   };
   courseId: string;
 };
 
 const formSchema = z.object({
-  description: z.string().min(1, {
-    message: "description is required",
+  price: z.string().min(1, {
+    message: "Price is required",
   }),
 });
 
-const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
+const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-        description: initialData.description || "",
+      price: initialData.price?.toString() || "0",
     },
   });
-
-  const { isValid, isSubmitting } = form.formState;
+  const { isSubmitting, isValid } = form.formState;
 
   const toggleEdit = () => setIsEditing(!isEditing);
 
@@ -49,7 +52,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...values, id: courseId }),
+        body: JSON.stringify({ ...values, price: parseFloat(values.price), id: courseId }),
       });
       const course = await response.json();
       if (!response.ok) {
@@ -66,16 +69,9 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Course description
+        Course price
         <Button variant="ghost" onClick={toggleEdit}>
-          {isEditing ? (
-            <>Cancel</>
-          ) : (
-            <>
-              <Pencil className="h-4 w-4" />
-              Edit description
-            </>
-          )}
+          {isEditing ? <>Cancel</> : <>Edit price</>}
         </Button>
       </div>
       {isEditing ? (
@@ -83,12 +79,13 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
-              name="description"
+              name="price"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea  disabled={isEditing} {...field} />
+                    <Input type="number" disabled={!isEditing} {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -100,10 +97,12 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
           </form>
         </FormProvider>
       ) : (
-        <div className={cn("text-sm mt-2", !initialData.description && "text-slate-500 italic")}>{initialData.description || "No Description"}</div>
+        <div className={cn("text-sm mt-2", !initialData.price && "italic")}>
+          {initialData.price ? initialData.price : "Set Price"}
+        </div>
       )}
     </div>
   );
 };
 
-export default DescriptionForm;
+export default PriceForm;
