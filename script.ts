@@ -5,15 +5,24 @@ config({ path: '.env.local' });
 
 
 const db = new PrismaClient();
+console.log(process.env.DATABASE_URL);
+
 async function main() {
   // ... you will write your Prisma Client queries here
-  const course = await db.user.create({
-    data: {
-      id: "1",
-      email: "hrushikesh"
-    }
-  })
-  console.log(course)
+  /* const category = await db.category.createMany({
+    data: [
+    { name: "Web Development" },
+    { name: "Data Science" },
+    { name: "Mobile Development" },
+    { name: "Game Development" },
+    { name: "Machine Learning" },
+    { name: "Cyber Security" },
+    { name: "Cloud Computing" },
+    { name: "DevOps" },
+    { name: "Blockchain" },
+    { name: "Artificial Intelligence" },
+  ]})
+  console.log(category); */
 }
 
 main()

@@ -15,6 +15,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { Pencil } from "lucide-react";
 
 type PriceFormProps = {
   initialData: {
@@ -71,7 +72,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
       <div className="font-medium flex items-center justify-between">
         Course price
         <Button variant="ghost" onClick={toggleEdit}>
-          {isEditing ? <>Cancel</> : <>Edit price</>}
+          {isEditing ? <>Cancel</> : <> <Pencil /> Edit price</>}
         </Button>
       </div>
       {isEditing ? (

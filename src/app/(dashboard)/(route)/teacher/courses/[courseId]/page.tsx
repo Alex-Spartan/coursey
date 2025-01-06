@@ -13,6 +13,7 @@ import ImageForm from "./_components/image-form";
 import CategoryForm from "./_components/category-form";
 import PriceForm from "./_components/price-form";
 import AttachmentForm from "./_components/attachment-form";
+import ChapterForm from "./_components/chapter-form";
 
 const page = async ({
   params,
@@ -26,6 +27,11 @@ const page = async ({
       id: params.courseId,
     },
     include: {
+      chapters: {
+        orderBy: {
+          position: "asc",
+        },
+      },
       attachments: {
         orderBy: {
           createdAt: "asc",
@@ -43,12 +49,14 @@ const page = async ({
     },
   });
 
+
   const requiredFields = [
     course.title,
     course.description,
     course.categoryId,
     course.imgUrl,
     course.price,
+    course.chapters.some((chapter) => chapter.isPublished),
   ];
   const totalFields = requiredFields.length;
   const filledFields = requiredFields.filter(Boolean).length;
@@ -84,7 +92,9 @@ const page = async ({
             <IconBadge icon={ListChecks} />
             <h2 className="text-xl">Course content</h2>
           </div>
-          <div>TODO Chhapters</div>
+          <div>
+            <ChapterForm initialData={course} courseId={course.id} />
+          </div>
         <div>
           <div className="flex items-center gap-x-2">
             <IconBadge icon={CircleDollarSign} />

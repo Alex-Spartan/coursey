@@ -55,7 +55,7 @@ const CreateCourse = () => {
       }
       toast.success("Course created successfully");
       toast.success("Redirecting to course form");
-      router.push(`/create/course/${course.id}`);
+      router.push(`/teacher/courses/${course.id}`);
 
     } catch {
       toast.error("An error occurred");

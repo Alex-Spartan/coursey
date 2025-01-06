@@ -87,7 +87,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea  disabled={isEditing} {...field} />
+                    <Textarea  disabled={!isEditing} {...field} />
                   </FormControl>
                 </FormItem>
               )}
