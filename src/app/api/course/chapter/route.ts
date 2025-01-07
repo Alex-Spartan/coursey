@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Chapter created successfully" }, { status: 201 });
 }
 
-export async function PUT(req: NextRequest) {
+export async function PATCH(req: NextRequest) {
     const { isAuthenticated } = getKindeServerSession();
     const isUserAuthenticated = await isAuthenticated();
     if (!isUserAuthenticated) {
@@ -79,7 +79,6 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ error: "Error updating chapter id: " + item.id }, { status: 401 });
         }
     }
-
 
     return NextResponse.json({ message: "Chapter updated successfully" }, { status: 201 });
 }

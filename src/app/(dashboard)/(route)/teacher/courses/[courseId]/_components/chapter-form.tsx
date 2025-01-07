@@ -67,7 +67,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
   const onReorder = async (updateData: { id: string; position: number}[]) => {
     try {
       const response = await fetch(`/api/course/chapter`, {
-        method: "PUT",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -85,8 +85,8 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
     }
   }
 
-  const onEdit = async () => {
-    router.push(`/dashboard/teacher/courses/${courseId}/edit`); //need edit
+  const onEdit = async (chapterId: string) => {
+    router.push(`/teacher/courses/${courseId}/chapter/${chapterId}`);
   }
 
   return (
