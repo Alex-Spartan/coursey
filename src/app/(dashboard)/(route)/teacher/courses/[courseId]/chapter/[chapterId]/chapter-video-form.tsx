@@ -1,37 +1,39 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Pencil } from "lucide-react";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
-import { Chapter } from "@prisma/client";
+import { SubmitHandler, useForm } from "react-hook-form";
+import MuxPlayer from "@mux/mux-player-react";
 
-type ChapterTitleFormProps = {
-  initialData: Chapter;
+import { Button } from "@/components/ui/button";
+import { PlayCircle, PlusCircle } from "lucide-react";
+import toast from "react-hot-toast";
+import FileUpload from "@/components/file-upload";
+
+import { Chapter, MuxData } from "@prisma/client";
+
+type ChapterVideoFormProps = {
+  initialData: Chapter & { muxData?: MuxData | null };
   courseId: string;
   chapterId: string;
 };
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
+  videoUrl: z.string().min(1, {
+    message: "videoUrl is required",
   }),
 });
 
 
-const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleFormProps) => {
+const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData.title || "",
+      videoUrl: initialData.videoUrl || "",
     },
   });
 
@@ -65,47 +67,42 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Chapter title
+        Chapter Video
         <Button variant="ghost" onClick={toggleEdit}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
-              <Pencil className="h-4 w-4" />
-              Edit title
+              <PlusCircle className="h-4 w-4" />
+              Add Video
             </>
           )}
         </Button>
       </div>
-      {isEditing ? (
-          <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField 
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input 
-                      disabled={!isEditing}
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <div className="mt-4">
-              <Button type="submit" disabled={!isValid || isSubmitting}>
-                Save
-              </Button>
+      {!isEditing ? (
+          !initialData.videoUrl ? (
+            <div className="flex items-center justify-center aspect-video mt-2">
+              <PlayCircle className="h-12 w-12 text-slate-500" />
             </div>
-          </form>
-          </FormProvider>
+          ) : (
+            <div className="relative aspect-video mt-2">
+              <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
+            </div>
+          )
       ) : (
-        <div className=" text-sm mt-2">{initialData.title}</div>
+        <div>
+          <FileUpload
+            endpoint="chapterVideo"
+            onChange={(url) => {
+              if (url) {
+                onSubmit({ videoUrl: url });
+              }
+            }}
+            />
+        </div>
       )}
     </div>
   );
 };
 
-export default ChapterTitleForm;
+export default ChapterVideoForm;

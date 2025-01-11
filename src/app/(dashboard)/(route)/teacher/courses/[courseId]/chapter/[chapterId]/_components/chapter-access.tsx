@@ -5,33 +5,31 @@ import { Pencil } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { z } from "zod";
-import { Input } from "@/components/ui/input";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { FormControl, FormDescription, FormField, FormItem } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import { Chapter } from "@prisma/client";
+import { Checkbox } from "@/components/ui/checkbox";
 
-type ChapterTitleFormProps = {
+type ChapterAccessFormProps = {
   initialData: Chapter;
   courseId: string;
   chapterId: string;
 };
 
 const formSchema = z.object({
-  title: z.string().min(1, {
-    message: "Title is required",
-  }),
+  isFree: z.boolean().default(false),
 });
 
 
-const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleFormProps) => {
+const ChapterAccessForm = ({ initialData, courseId, chapterId }: ChapterAccessFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData.title || "",
+        isFree: !!initialData.isFree,
     },
   });
 
@@ -65,14 +63,14 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Chapter title
+        Chapter Access
         <Button variant="ghost" onClick={toggleEdit}>
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4" />
-              Edit title
+              Change Access
             </>
           )}
         </Button>
@@ -82,15 +80,17 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField 
               control={form.control}
-              name="title"
+              name="isFree"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
-                    <Input 
-                      disabled={!isEditing}
-                      {...field}
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormDescription>
+                        Check this box if you want this chapter to be free for preview
+                    </FormDescription>
+                  </div>
                 </FormItem>
               )}
             />
@@ -102,10 +102,12 @@ const ChapterTitleForm = ({ initialData, courseId, chapterId }: ChapterTitleForm
           </form>
           </FormProvider>
       ) : (
-        <div className=" text-sm mt-2">{initialData.title}</div>
+        <div className=" text-sm mt-2">
+            {!!initialData.isFree ? "Free for preview" : "Not free for preview"}
+        </div>
       )}
     </div>
   );
 };
 
-export default ChapterTitleForm;
+export default ChapterAccessForm;

@@ -1,0 +1,241 @@
+{
+    "message": "Handling upload request",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.967Z",
+    "annotations": {
+        "json": {
+            "files": [
+                {
+                    "name": "RDT_20230815_172124.mp4",
+                    "size": 572118,
+                    "type": "video/mp4",
+                    "lastModified": 1717394874140
+                }
+            ]
+        }
+    },
+    "spans": {
+        "handleUploadAction": 6
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Parsing user input",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.971Z",
+    "annotations": {},
+    "spans": {
+        "handleUploadAction": 10
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Input parsed successfully",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.973Z",
+    "annotations": {},
+    "spans": {
+        "handleUploadAction": 12
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Running middleware",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.975Z",
+    "annotations": {},
+    "spans": {
+        "runRouteMiddleware": 1,
+        "handleUploadAction": 14
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Parsing route config",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.980Z",
+    "annotations": {
+        "routerConfig": {
+            "video": {
+                "maxFileCount": 1,
+                "maxFileSize": "4GB"
+            }
+        }
+    },
+    "spans": {
+        "handleUploadAction": 19
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Route config parsed successfully",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.983Z",
+    "annotations": {
+        "routeConfig": {
+            "video": {
+                "maxFileSize": "4GB",
+                "maxFileCount": 1,
+                "minFileCount": 1,
+                "contentDisposition": "inline"
+            }
+        }
+    },
+    "spans": {
+        "handleUploadAction": 22
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Validating files meet the config requirements",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.985Z",
+    "annotations": {
+        "files": [
+            {
+                "name": "RDT_20230815_172124.mp4",
+                "size": 572118,
+                "type": "video/mp4",
+                "lastModified": 1717394874140
+            }
+        ]
+    },
+    "spans": {
+        "handleUploadAction": 24
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Files validated.",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.987Z",
+    "annotations": {},
+    "spans": {
+        "handleUploadAction": 26
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Generating presigned URLs",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:24.998Z",
+    "annotations": {
+        "fileUploadRequests": [
+            {
+                "name": "RDT_20230815_172124.mp4",
+                "size": 572118,
+                "type": "video/mp4",
+                "lastModified": 1736491044980,
+                "contentDisposition": "inline"
+            }
+        ],
+        "ingestUrl": "https://sea1.ingest.uploadthing.com"
+    },
+    "spans": {
+        "handleUploadAction": 37
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Sending presigned URLs to client",
+    "logLevel": "INFO",
+    "timestamp": "2025-01-10T06:37:25.019Z",
+    "annotations": {
+        "presignedUrls": [
+            {
+                "url": "https://sea1.ingest.uploadthing.com/HmTJGdXNurPlILi6dK2CyEljeHwLcGavbin6sz79JBrTW1PA?expires=1736494645010&x-ut-identifier=vaku3w6ac2&x-ut-file-name=RDT_20230815_172124.mp4&x-ut-file-size=572118&x-ut-file-type=video%252Fmp4&x-ut-slug=chapterVideo&x-ut-content-disposition=inline&signature=hmac-sha256%3Da4aadb3394ab6a68de991dd41de27687ff3c0513522e62252699b0d7ad7f0ec9",
+                "key": "HmTJGdXNurPlILi6dK2CyEljeHwLcGavbin6sz79JBrTW1PA",
+                "name": "RDT_20230815_172124.mp4",
+                "customId": null
+            }
+        ]
+    },
+    "spans": {
+        "handleUploadAction": 58
+    },
+    "fiberId": "#19"
+}
+{
+    "message": "Running fiber as daemon",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:25.022Z",
+    "annotations": {
+        "handleDaemon": "await"
+    },
+    "spans": {},
+    "fiberId": "#19"
+}
+{
+    "message": "Registered metadata (200)",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:27.311Z",
+    "annotations": {
+        "response": {
+            "_id": "@effect/platform/HttpClientResponse",
+            "request": {
+                "_id": "@effect/platform/HttpClientRequest",
+                "method": "POST",
+                "url": "https://sea1.ingest.uploadthing.com/route-metadata",
+                "urlParams": [],
+                "hash": {
+                    "_id": "Option",
+                    "_tag": "None"
+                },
+                "headers": {
+                    "x-uploadthing-api-key": "<redacted>",
+                    "x-uploadthing-version": "7.4.1",
+                    "x-uploadthing-be-adapter": "nextjs-app",
+                    "x-uploadthing-fe-package": "@uploadthing/react",
+                    "content-type": "application/json",
+                    "content-length": "246",
+                    "b3": "f1184125929d0d974f63a3aea19b10f5-42367e0cd03575b1-1-ce7754a9ae6e6812",
+                    "traceparent": "00-f1184125929d0d974f63a3aea19b10f5-42367e0cd03575b1-01"
+                },
+                "body": {
+                    "_id": "@effect/platform/HttpBody",
+                    "_tag": "Uint8Array",
+                    "body": "{\"fileKeys\":[\"HmTJGdXNurPlILi6dK2CyEljeHwLcGavbin6sz79JBrTW1PA\"],\"metadata\":{\"userId\":\"kp_7af7dedade6d4904817f559448c97f7c\"},\"isDev\":false,\"callbackUrl\":\"http://localhost:3000/api/uploadthing\",\"callbackSlug\":\"chapterVideo\",\"awaitServerData\":true}",
+                    "contentType": "application/json",
+                    "contentLength": 246
+                }
+            },
+            "status": 200,
+            "headers": {
+                "access-control-allow-origin": "*",
+                "access-control-expose-headers": "x-ut-range-start",
+                "connection": "keep-alive",
+                "content-length": "11",
+                "content-type": "application/json; charset=utf-8",
+                "date": "Fri, 10 Jan 2025 06:37:27 GMT"
+            },
+            "remoteAddress": {
+                "_id": "Option",
+                "_tag": "None"
+            },
+            "body": {
+                "ok": true
+            }
+        }
+    },
+    "spans": {
+        "handleUploadAction": 2350
+    },
+    "fiberId": "#23"
+}
+{
+    "message": "Sending response",
+    "logLevel": "DEBUG",
+    "timestamp": "2025-01-10T06:37:27.318Z",
+    "annotations": {
+        "body": [
+            {
+                "url": "https://sea1.ingest.uploadthing.com/HmTJGdXNurPlILi6dK2CyEljeHwLcGavbin6sz79JBrTW1PA?expires=1736494645010&x-ut-identifier=vaku3w6ac2&x-ut-file-name=RDT_20230815_172124.mp4&x-ut-file-size=572118&x-ut-file-type=video%252Fmp4&x-ut-slug=chapterVideo&x-ut-content-disposition=inline&signature=hmac-sha256%3Da4aadb3394ab6a68de991dd41de27687ff3c0513522e62252699b0d7ad7f0ec9",
+                "key": "HmTJGdXNurPlILi6dK2CyEljeHwLcGavbin6sz79JBrTW1PA",
+                "name": "RDT_20230815_172124.mp4",
+                "customId": null
+            }
+        ]
+    },
+    "spans": {},
+    "fiberId": "#19"
+}

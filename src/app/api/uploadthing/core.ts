@@ -15,7 +15,8 @@ const onUploadComplete = async ({ metadata, file }: {
   metadata: { userId: string };
   file: { url: string, name: string };
 }) => {
-  return { uploadedBy: metadata.userId };
+  console.log("metadata", metadata);
+  return { uploadedBy: metadata.userId, url: file.url, name: file.name };
 }
 
 export const ourFileRouter = {

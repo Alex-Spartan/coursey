@@ -1,13 +1,16 @@
 import { IconBadge } from "@/app/(dashboard)/_components/icon-badge";
 import { db } from "@/lib/prisma";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { ArrowLeft, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
 import ChapterTitleForm from "./_components/chapter-title";
+import ChapterDescription from "./_components/chapter-description-form";
+import ChapterAccessForm from "./_components/chapter-access";
+import ChapterVideoForm from "./chapter-video-form";
+import Banner from "@/components/banner";
 
 const ChapterId = async ({
   params,
@@ -49,8 +52,16 @@ const ChapterId = async ({
   const totalFields = requiredFields.length;
   const filledFields = requiredFields.filter(Boolean).length;
   const completionText = `${filledFields}/${totalFields}`;
+  const isComplete = requiredFields.every(Boolean);
 
   return (
+    <>
+    {!chapter.isPublished && (
+      <Banner
+        label="This chapter is not published and will not be visible to students"
+        variant="warning"
+      />
+    )}
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="w-full">
@@ -68,21 +79,54 @@ const ChapterId = async ({
                 Complete all fields ({completionText})
               </span>
             </div>
+
           </div>
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-        <div className="sapce-y-4">
+        <div className="space-y-4">
           <div>
             <div className="flex items-center gap-x-2">
               <IconBadge icon={LayoutDashboard} />
               <h2>Customize your chapter</h2>
             </div>
-            <ChapterTitleForm initialData={chapter} chapterId={params.chapterId} courseId={params.courseId} />
+            <ChapterTitleForm
+              initialData={chapter}
+              chapterId={params.chapterId}
+              courseId={params.courseId}
+            />
+            <ChapterDescription
+              initialData={chapter}
+              chapterId={params.chapterId}
+              courseId={params.courseId}
+            />
           </div>
+          <div>
+            <div className="flex items-center gap-x-2">
+              <IconBadge icon={Eye} />
+              <h2>Accessing settings</h2>
+            </div>
+            <ChapterAccessForm
+              initialData={chapter}
+              chapterId={params.chapterId}
+              courseId={params.courseId}
+            />
+          </div>
+        </div>
+        <div>
+        <div className="flex items-center gap-x-2">
+              <IconBadge icon={Video} />
+              <h2>Customize your chapter</h2>
+            </div>
+            <ChapterVideoForm
+              initialData={chapter}
+              chapterId={params.chapterId}
+              courseId={params.courseId}
+            />
         </div>
       </div>
     </div>
+    </>
   );
 };
 
