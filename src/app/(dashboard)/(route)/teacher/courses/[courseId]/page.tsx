@@ -66,11 +66,13 @@ const page = async ({
 
   return (
     <>
-      {!course.isPublished && (
+      {isComplete ? (
         <Banner
           label="Your course is ready to be published"
           variant="success"
         />
+      ) : (
+        <Banner label="Complete all fields to publish your course" />
       )}
       <div className="p-6">
         <div className="flex items-center justify-between">

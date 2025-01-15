@@ -54,7 +54,6 @@ const CreateCourse = () => {
         return;
       }
       toast.success("Course created successfully");
-      toast.success("Redirecting to course form");
       router.push(`/teacher/courses/${course.id}`);
 
     } catch {
