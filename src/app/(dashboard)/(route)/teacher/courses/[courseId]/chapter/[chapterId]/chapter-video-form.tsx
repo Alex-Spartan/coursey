@@ -101,6 +101,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
             />
         </div>
       )}
+      <div className="text-sm italic text-slate-500">Uploading and processing video may take time. If video doesn&apos;t appear try refresing page</div>
     </div>
   );
 };

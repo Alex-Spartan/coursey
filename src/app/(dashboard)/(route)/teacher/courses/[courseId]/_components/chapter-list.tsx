@@ -53,7 +53,6 @@ const ChapterList = ({ onEdit, onReorder, items }: ChapterListProps) => {
           position: index + 1,
         }));
 
-        console.log('onReorder called');
         onReorder(bulkUpdateData);
         return updatedChapters;
       });

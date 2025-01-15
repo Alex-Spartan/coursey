@@ -99,7 +99,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
         </FormProvider>
       ) : (
         <div className={cn("text-sm mt-2", !initialData.price && "italic")}>
-          {initialData.price ? initialData.price : "Set Price"}
+          {(initialData.price || initialData.price === 0) ? initialData.price : "Set Price"}
         </div>
       )}
     </div>

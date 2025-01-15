@@ -57,7 +57,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
         return;
       }
       setIsUpdating(false);
-      toast.success("Chapter updated successfully");
+      toast.success("Chapter added successfully");
       router.refresh();
     } catch {
       toast.error("An error occurred");
@@ -86,6 +86,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
   }
 
   const onEdit = async (chapterId: string) => {
+    setIsUpdating(true);
     router.push(`/teacher/courses/${courseId}/chapter/${chapterId}`);
   }
 
@@ -144,9 +145,15 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
               !initialData.chapters[0]?.title && "text-slate-500"
             )}
           >
-            <ChapterList onEdit={onEdit} onReorder={onReorder} items={initialData.chapters || []} />
+            {
+              initialData.chapters.length == 0 ? ( <div>
+                No chapters added yet
+              </div> ) : (
+                <ChapterList onEdit={onEdit} onReorder={onReorder} items={initialData.chapters || []} />
+              )
+            }
           </div>
-          {!IsCreating && (
+          {!IsCreating && initialData.chapters.length > 0 && (
             <div className="text-slate-500 italic text-sm mt-2">
               Move Chapters to change the order
             </div>

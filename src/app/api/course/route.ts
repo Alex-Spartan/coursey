@@ -36,3 +36,62 @@ export async function PATCH(req: Request) {
 
     return Response.json({ message: "Course updated successfully" });
 }
+
+export async function DELETE(req: Request) {
+    const { isAuthenticated } = getKindeServerSession();
+    const isUserAuthenticated = await isAuthenticated();
+    if (!isUserAuthenticated) {
+        return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const body = await req.json();
+    const course = await db.course.findUnique({
+        where: {
+            id: body.id,
+        },
+        include: {
+            chapters: {
+                include: {
+                    muxData: true,
+                }
+            },
+        }
+    });
+    if (!course) {
+        return Response.json({ error: "Course not found" }, { status: 404 });
+    }
+
+    for (const chapter of course.chapters) {
+        const existingMux = await db.muxData.findFirst({
+            where: {
+                chapterId: chapter.id,
+            }
+        });
+        if (existingMux) {
+            const deletedMux = await db.muxData.delete({
+                where: {
+                    chapterId: chapter.id,
+                }
+            });
+            console.log(deletedMux);
+        }
+    }
+    const deletedChapters =await db.chapter.deleteMany({
+        where: {
+            courseId: course.id,
+        }
+    });
+    if (!deletedChapters) {
+        return Response.json({ error: "An error occurred while deleting chapters" }, { status: 500 });
+    }
+
+    const deletedCourse =await db.course.delete({
+        where: {
+            id: course.id,
+        }
+    });
+    if (!deletedCourse) {
+        return Response.json({ error: "An error occurred while deleting course" }, { status: 500 });
+    }
+
+    return Response.json({ message: "Course deleted successfully" });
+}
