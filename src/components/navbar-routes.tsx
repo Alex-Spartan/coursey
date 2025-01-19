@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SearchInput from "./search-input";
 
 const NavbarRoutes = () => {
   const { getUser } = useKindeBrowserClient();
@@ -25,48 +26,58 @@ const NavbarRoutes = () => {
   const user = getUser();
   const isTeacherPage = pathname?.startsWith("/teacher");
   const isPlayerPage = pathname?.startsWith("/chapter");
-  return (
-    <div className="flex gap-x-2 ml-auto">
-      {isTeacherPage || isPlayerPage ? (
-        <Link href="/">
-          <Button size="sm" variant="ghost">
-            <LogOut className="h-4 w-4 mr-2" />
-            Exit
-          </Button>
-        </Link>
-      ) : (
-        <Link href="/teacher/courses">
-          <Button size="sm" variant="ghost">
-            Teacher mode
-          </Button>
-        </Link>
-      )}
+  const isSearchPage = pathname?.startsWith("/search");
 
-      {user !== null ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Avatar>
-                  <AvatarImage
-                    src={user.picture || "https://github.com/shadcn.png"}
-                    alt={user.given_name || "User"}
-                  />
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LogoutLink>Logout</LogoutLink>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button size="sm" variant="default">
-              <LoginLink>Log in</LoginLink>
+  
+  return (
+    <>
+    {isSearchPage && (
+      <div className="hidden md:block">
+        <SearchInput />
+      </div>
+    )}
+      <div className="flex gap-x-2 ml-auto">
+        {isTeacherPage || isPlayerPage ? (
+          <Link href="/">
+            <Button size="sm" variant="ghost">
+              <LogOut className="h-4 w-4 mr-2" />
+              Exit
             </Button>
-          )}
-    </div>
+          </Link>
+        ) : (
+          <Link href="/teacher/courses">
+            <Button size="sm" variant="ghost">
+              Teacher mode
+            </Button>
+          </Link>
+        )}
+
+        {user !== null ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar>
+                <AvatarImage
+                  src={user.picture || "https://github.com/shadcn.png"}
+                  alt={user.given_name || "User"}
+                />
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>
+                <LogoutLink>Logout</LogoutLink>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Button size="sm" variant="default">
+            <LoginLink>Log in</LoginLink>
+          </Button>
+        )}
+      </div>
+    </>
   );
 };
 export default NavbarRoutes;

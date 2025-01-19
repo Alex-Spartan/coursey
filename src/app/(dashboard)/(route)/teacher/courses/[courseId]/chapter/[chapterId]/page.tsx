@@ -58,7 +58,7 @@ const ChapterId = async ({
 
   return (
     <>
-      {!chapter.isPublished && (
+      {!isComplete && (
         <Banner
           label="This chapter is not published and will not be visible to students"
           variant="warning"

@@ -9,20 +9,17 @@ console.log(process.env.DATABASE_URL);
 
 async function main() {
   // ... you will write your Prisma Client queries here
-  /* const category = await db.category.createMany({
+  const category = await db.category.createMany({
     data: [
-    { name: "Web Development" },
-    { name: "Data Science" },
-    { name: "Mobile Development" },
-    { name: "Game Development" },
-    { name: "Machine Learning" },
-    { name: "Cyber Security" },
-    { name: "Cloud Computing" },
-    { name: "DevOps" },
-    { name: "Blockchain" },
-    { name: "Artificial Intelligence" },
+    { name: "Music" }, 
+    { name: "Photography" },
+    { name: "Fitness" },
+    { name: "Engineering" },
+    { name: "Filming" },
+    { name: "Accounting" },
+    { name: "Computer Science" },
   ]})
-  console.log(category); */
+  console.log(category);
 }
 
 main()
