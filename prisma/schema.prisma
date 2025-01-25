@@ -1,27 +1,46 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-} 
+}
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  given_name  String?
-  family_name String?
-  picture     String?
-  user_name   String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Attachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade, map: "Attachment_courseId_fkey")
+
+  @@index([courseId], map: "Attachment_courseId_idx")
+}
+
+model Category {
+  id     String   @id @default(cuid())
+  name   String   @unique(map: "Category_name_key")
+  course Course[]
+}
+
+model Chapter {
+  id           String         @id @default(cuid())
+  title        String
+  description  String?
+  videoUrl     String?        @db.Text
+  position     Int
+  isPublished  Boolean        @default(false)
+  isFree       Boolean        @default(false)
+  courseId     String
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade, map: "Chapter_courseId_fkey")
+  muxData      MuxData?
+  userProgress UserProgress[]
+
+  @@index([courseId], map: "Chapter_courseId_idx")
 }
 
 model Course {
@@ -33,90 +52,65 @@ model Course {
   price       Float?
   isPublished Boolean      @default(false)
   categoryId  String?
-  chapters    Chapter[]
-  attachments Attachment[]
-  purchases   Purchase[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  Category    Category?    @relation(fields: [categoryId], references: [id])
+  attachments  Attachment[]
+  chapters     Chapter[]
+  category    Category?    @relation(fields: [categoryId], references: [id], map: "Course_categoryId_fkey")
+  purchase    Purchase[]
 
-  @@index([categoryId])
-  @@fulltext([title])
-}
-
-model Attachment {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-}
-
-model Category {
-  id      String   @id @default(cuid())
-  name    String   @unique
-  courses Course[]
-}
-
-model Chapter {
-  id           String         @id @default(cuid())
-  title        String
-  description  String?
-  videoUrl     String?        @db.Text
-  position     Int
-  isPublished  Boolean        @default(false)
-  isFree       Boolean        @default(false)
-  muxData      MuxData?
-  courseId     String
-  course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  userProgress UserProgress[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  @@index([courseId])
+  @@index([categoryId], map: "Course_categoryId_fkey")
 }
 
 model MuxData {
   id         String  @id @default(cuid())
   playbackId String?
   assetId    String
-  chapterId  String  @unique
-  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  chapterId  String  @unique(map: "MuxData_chapterId_key")
+  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade, map: "MuxData_chapterId_fkey")
+}
+
+model Purchase {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  course    Course   @relation(fields: [courseId], references: [id], map: "Purchase_courseId_fkey")
+
+  @@unique([userId, courseId], map: "Purchase_userId_courseId_key")
+  @@index([courseId], map: "Purchase_courseId_idx")
+}
+
+model StripeCustomer {
+  id               String   @id @default(cuid())
+  userId           String   @unique(map: "StripeCustomer_userId_key")
+  stripeCustomerId String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique(map: "User_email_key")
+  given_name  String?
+  family_name String?
+  picture     String?
+  user_name   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model UserProgress {
   id          String   @id @default(cuid())
   userId      String
   chapterId   String
-  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade, map: "UserProgress_chapterId_fkey")
 
-  @@index([userId])
-  @@index([chapterId])
-}
-
-
-model Purchase {
-  id        String   @id @default(cuid())
-  userId    String
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([courseId])
-}
-
-model StripeCustomer {
-  id        String   @id @default(cuid())
-  userId    String  @unique
-  stripeCustomerId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([userId, chapterId], map: "UserProgress_userId_chapterId_key")
+  @@index([chapterId], map: "UserProgress_chapterId_idx")
+  @@index([userId], map: "UserProgress_userId_idx")
 }

@@ -1,3 +1,4 @@
+import CourseProgress from '@/app/(course)/courses/[courseId]/_components/course-progress';
 import { IconBadge } from '@/app/(dashboard)/_components/icon-badge';
 import { BookOpen } from 'lucide-react';
 import Image from 'next/image';
@@ -50,9 +51,11 @@ const CourseCard = ({
             </div>
           </div>
           {progress !== null ? (
-            <div>
-              Add progress Component
-            </div>
+            <CourseProgress
+              variant={progress === 100 ? "success" : "default"}
+              value={progress}
+              size="sm"
+            />
           ) : (
             <p className='test-md md:test-sm font-medium text-slate-700'>
               {price === 0 ? "Free" : `$${price}`}

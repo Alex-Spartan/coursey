@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,9 @@ const formSchema = z.object({
 const CreateCourse = () => {
   const router = useRouter();
   const { getUser } = useKindeBrowserClient();
+  const user = getUser();
+  console.log(user);
+  if (!user) return redirect("/");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +43,6 @@ const CreateCourse = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const user = getUser();
       const response = await fetch("/api/course", {
         method: "POST",
         headers: {

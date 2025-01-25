@@ -22,9 +22,10 @@ export const getCourses = async ({ id, title, categoryId }: GetCourses): Promise
                     contains: title,
                 },
                 categoryId: categoryId ? categoryId : undefined,
+                isPublished: true,
             },
             include: {
-                Category: true,
+                category: true,
                 chapters: {
                     where: {
                         isPublished: true,
@@ -33,9 +34,9 @@ export const getCourses = async ({ id, title, categoryId }: GetCourses): Promise
                         id: true,
                     }
                 },
-                purchases: {
+                purchase: {
                     where: {
-                        id,
+                        userId: id,
                     }
                 }
             },
@@ -43,10 +44,11 @@ export const getCourses = async ({ id, title, categoryId }: GetCourses): Promise
                 createdAt: 'desc',
             }
         });
+        
 
         const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
             courses.map(async course => {
-                if (course.purchases.length === 0) {
+                if (course.purchase.length === 0) {
                     return {
                         ...course,
                         progress: null,
