@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -28,10 +30,7 @@ const formSchema = z.object({
 
 const CreateCourse = () => {
   const router = useRouter();
-  const { getUser } = useKindeBrowserClient();
-  const user = getUser();
-  console.log(user);
-  if (!user) return redirect("/");
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,10 +38,15 @@ const CreateCourse = () => {
     },
   });
 
+  const { getUser } = useKindeBrowserClient();
+  const user = getUser();
+
+
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsLoading(true);
       const response = await fetch("/api/course", {
         method: "POST",
         headers: {
@@ -55,15 +59,24 @@ const CreateCourse = () => {
         toast.error(course.error);
         return;
       }
+      setIsLoading(false);
       toast.success("Course created successfully");
       router.push(`/teacher/courses/${course.id}`);
 
-    } catch {
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
       toast.error("An error occurred");
     }
   };
 
   return (
+    <>
+    {isLoading && (
+      <div className="flex items-center justify-center p-12">
+        <Loader2 className="animate-spin text-xl" />
+      </div>
+    )}
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
         <h1 className="text-2xl">Name you course</h1>
@@ -107,6 +120,7 @@ const CreateCourse = () => {
         </Form>
       </div>
     </div>
+    </>
   );
 };
 export default CreateCourse;

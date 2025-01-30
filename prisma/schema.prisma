@@ -54,8 +54,8 @@ model Course {
   categoryId  String?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-  attachments  Attachment[]
-  chapters     Chapter[]
+  attachments Attachment[]
+  chapters    Chapter[]
   category    Category?    @relation(fields: [categoryId], references: [id], map: "Course_categoryId_fkey")
   purchase    Purchase[]
 
@@ -108,7 +108,7 @@ model UserProgress {
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade, map: "UserProgress_chapterId_fkey")
+  Chapter     Chapter  @relation(fields: [chapterId], references: [id])
 
   @@unique([userId, chapterId], map: "UserProgress_userId_chapterId_key")
   @@index([chapterId], map: "UserProgress_chapterId_idx")

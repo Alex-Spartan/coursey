@@ -60,13 +60,26 @@ const page = async ({
     course.chapters.some((chapter) => chapter.isPublished),
   ];
   const totalFields = requiredFields.length;
-  const filledFields = requiredFields.filter(Boolean).length;
+  let filledFields;
+  const isBool = (item) => {
+    if (item !== null && item !== undefined) {
+      return true;
+    }
+    return false;
+  };
+  if (course.price === 0) {
+    filledFields = requiredFields.filter(Boolean).length + 1;
+  } else {
+    filledFields = requiredFields.filter(Boolean).length;
+  }
+  const isComplete = requiredFields.every(isBool);
   const completionText = `${filledFields}/${totalFields} done`;
-  const isComplete = requiredFields.every(Boolean);
 
   return (
     <>
-      {isComplete ? (
+      {course.isPublished ? (
+        <Banner label="This course is live" variant="success" />
+      ) : isComplete ? (
         <Banner
           label="Your course is ready to be published"
           variant="success"

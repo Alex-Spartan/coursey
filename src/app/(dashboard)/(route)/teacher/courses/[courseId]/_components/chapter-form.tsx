@@ -9,10 +9,10 @@ import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, FormField, FormItem } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { Chapter, Course } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import ChapterList from "./chapter-list";
+import { useRouter } from "next/navigation";
 
 type ChapterFormProps = {
   initialData: Course & { chapters: Chapter[] };
@@ -33,6 +33,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       title: initialData.chapters[0]?.title,
     },
   });
+  console.log("chapters ",initialData.chapters);
 
   const { isValid, isSubmitting } = form.formState;
 
@@ -84,7 +85,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       toast.error("An error occurred");
     }
   }
-
+  
   const onEdit = async (chapterId: string) => {
     setIsUpdating(true);
     router.push(`/teacher/courses/${courseId}/chapter/${chapterId}`);
@@ -94,8 +95,8 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       {
         IsUpdating && (
-          <div className="absolute h-full w-full bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
-            <Loader2 className="animate-spin h-6 w-6 text-sky-700" />
+          <div className="absolute h-32 w-32 bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+            <Loader2 className="animate-spin h-6 w-6 text-black" />
           </div>
         )
       }
@@ -149,7 +150,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
               initialData.chapters.length == 0 ? ( <div>
                 No chapters added yet
               </div> ) : (
-                <ChapterList onEdit={onEdit} onReorder={onReorder} items={initialData.chapters || []} />
+                <ChapterList key={initialData.chapters.length} onEdit={onEdit} onReorder={onReorder} items={initialData.chapters || []} />
               )
             }
           </div>

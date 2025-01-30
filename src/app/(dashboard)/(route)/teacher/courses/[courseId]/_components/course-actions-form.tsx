@@ -34,7 +34,7 @@ const CourseAction = ({
         return;
       }
       toast.success(chapter.message);
-      router.push(`/teacher/courses/${courseId}`);
+      router.push(`/teacher/courses`);
     } catch {
       toast.error("An error occurred");
     }

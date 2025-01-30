@@ -29,6 +29,7 @@ interface ChapterListProps {
 
 const ChapterList = ({ onEdit, onReorder, items }: ChapterListProps) => {
   const [chapters, setChapters] = useState<Chapter[]>(items);
+  console.log("items", items);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -39,7 +40,6 @@ const ChapterList = ({ onEdit, onReorder, items }: ChapterListProps) => {
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
-    console.log('handleDragEnd called');
 
     if (active.id !== over?.id) {
       setChapters((chapters) => {
