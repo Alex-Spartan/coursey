@@ -33,7 +33,6 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
       title: initialData.chapters[0]?.title,
     },
   });
-  console.log("chapters ",initialData.chapters);
 
   const { isValid, isSubmitting } = form.formState;
 

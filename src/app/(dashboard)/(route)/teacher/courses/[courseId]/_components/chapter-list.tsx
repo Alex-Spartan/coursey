@@ -29,7 +29,6 @@ interface ChapterListProps {
 
 const ChapterList = ({ onEdit, onReorder, items }: ChapterListProps) => {
   const [chapters, setChapters] = useState<Chapter[]>(items);
-  console.log("items", items);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
