@@ -53,7 +53,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { chapterId:
 
             const asset = await video.assets.create({
                 input: data.videoUrl,
-                playback_policy: "public",
+                playback_policy: ["public"],
                 test: false,
             });
 
