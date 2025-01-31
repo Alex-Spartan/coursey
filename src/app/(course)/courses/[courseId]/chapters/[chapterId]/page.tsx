@@ -17,7 +17,7 @@ const ChapterIdPage = async ({
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) return redirect("/search");
+  if (!user) return redirect("/api/auth/login");
 
   const {
     chapter,
@@ -33,7 +33,7 @@ const ChapterIdPage = async ({
     chapterId: params.chapterId,
   });
 
-  if (!chapter && !course) return redirect("/search");
+  if (!chapter && !course) return redirect("/api/auth/login");
 
   const isLocked = !chapter.isFree && !purchase;
   const isCompleteOnEnd = !!purchase && !userProgress?.isCompleted;
@@ -67,7 +67,6 @@ const ChapterIdPage = async ({
             {purchase ? (
               <CourseProgressButton
                 chapterId={params.chapterId}
-                courseId={params.courseId}
                 nextChapterId={nextChapter?.id}
                 isCompleted={!!userProgress?.isCompleted}
               />

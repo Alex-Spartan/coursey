@@ -15,7 +15,7 @@ const CourseLayout = async ({
 }) => {
     const { getUser } = getKindeServerSession();
     const user = await getUser();
-    if (!user) return redirect('/');
+    if (!user) return redirect('/api/auth/login');
 
     const course = await db.course.findUnique({
         where: {
@@ -40,7 +40,7 @@ const CourseLayout = async ({
         }
     })
 
-    if (!course) return redirect('/');
+    if (!course) return redirect('/api/auth/login');
 
     const progressCount = await getProgress(user.id, course.id)
 

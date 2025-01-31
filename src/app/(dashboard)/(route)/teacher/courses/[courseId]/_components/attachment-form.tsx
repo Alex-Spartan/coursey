@@ -37,7 +37,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   ) => {
     toggleEdit();
     try {
-      const response = await fetch(`/api/course/attachment`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/attachment`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   const deleteFile = async (id: string) => {
     setDeletingId(id);
     try {
-      const response = await fetch(`/api/course/attachment`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/attachment`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

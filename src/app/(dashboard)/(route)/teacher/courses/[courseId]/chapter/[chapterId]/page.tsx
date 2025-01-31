@@ -1,11 +1,12 @@
-import { IconBadge } from "@/app/(dashboard)/_components/icon-badge";
-import { db } from "@/lib/prisma";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { ArrowLeft, Eye, LayoutDashboard, Video } from "lucide-react";
 import Link from "next/link";
+
+import { db } from "@/lib/prisma";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import React from "react";
-import toast from "react-hot-toast";
+
+
+import { IconBadge } from "@/app/(dashboard)/_components/icon-badge";
 import ChapterTitleForm from "./_components/chapter-title";
 import ChapterDescription from "./_components/chapter-description-form";
 import ChapterAccessForm from "./_components/chapter-access";
@@ -24,7 +25,7 @@ const ChapterId = async ({
   const { getUser } = getKindeServerSession();
   const user = await getUser();
   if (!user) {
-    return redirect("/");
+    return redirect("/api/auth/login");
   }
 
   const chapter = await db.chapter.findUnique({
@@ -36,14 +37,7 @@ const ChapterId = async ({
       muxData: true,
     },
   });
-
-  if (!chapter) {
-    toast.error("Chapter not found");
-    setTimeout(() => {
-      redirect("/");
-    }, 1000);
-    return null;
-  }
+  if (!chapter) redirect(`/teacher/courses/${params.courseId}`);
 
   const requiredFields = [
     chapter?.title,
@@ -54,7 +48,6 @@ const ChapterId = async ({
   const filledFields = requiredFields.filter(Boolean).length;
   const completionText = `${filledFields}/${totalFields}`;
   const isComplete = requiredFields.every(Boolean);
-
 
   return (
     <>
@@ -81,12 +74,12 @@ const ChapterId = async ({
                   Complete all fields ({completionText})
                 </span>
               </div>
-                <ChapterActions
-                  disabled={!isComplete}
-                  chapterId={params.chapterId}
-                  courseId={params.courseId}
-                  isPublished={chapter.isPublished}
-                />
+              <ChapterActions
+                disabled={!isComplete}
+                chapterId={params.chapterId}
+                courseId={params.courseId}
+                isPublished={chapter.isPublished}
+              />
             </div>
           </div>
         </div>

@@ -1,21 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Icon, XCircle } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface CourseProgressButtonProps {
   chapterId: string;
-  courseId: string;
   nextChapterId?: string;
   isCompleted?: boolean;
 }
 
 const CourseProgressButton = ({
   chapterId,
-  courseId,
   nextChapterId,
   isCompleted,
 }: CourseProgressButtonProps) => {
@@ -25,7 +23,7 @@ const CourseProgressButton = ({
   const onClick = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/course/chapter/${chapterId}/progress`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter/${chapterId}/progress`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

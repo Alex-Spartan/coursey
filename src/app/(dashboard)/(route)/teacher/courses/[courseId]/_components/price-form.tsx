@@ -48,7 +48,7 @@ const PriceForm = ({ initialData, courseId }: PriceFormProps) => {
   ) => {
     toggleEdit();
     try {
-      const response = await fetch(`/api/course`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

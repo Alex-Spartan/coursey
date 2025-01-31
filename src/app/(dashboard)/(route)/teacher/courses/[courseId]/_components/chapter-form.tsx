@@ -44,7 +44,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
     toggleCreate();
     try {
       setIsUpdating(true);
-      const response = await fetch(`/api/course/chapter`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
 
   const onReorder = async (updateData: { id: string; position: number}[]) => {
     try {
-      const response = await fetch(`/api/course/chapter`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const ChapterForm = ({ initialData, courseId }: ChapterFormProps) => {
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       {
         IsUpdating && (
-          <div className="absolute h-32 w-32 bg-slate-500/20 top-0 right-0 rounded-md flex items-center justify-center">
+          <div className="absolute h-32 w-32 bg-slate-500/20 top-0 left-0 rounded-md flex items-center justify-center">
             <Loader2 className="animate-spin h-6 w-6 text-black" />
           </div>
         )

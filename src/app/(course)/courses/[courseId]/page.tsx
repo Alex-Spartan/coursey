@@ -1,7 +1,6 @@
 import { db } from "@/lib/prisma";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { redirect } from "next/navigation";
-import React from "react";
 
 const CourseIdPage = async ({
   params,
@@ -12,7 +11,7 @@ const CourseIdPage = async ({
 }) => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  if (!user) return redirect("/search");
+  if (!user) return redirect("/api/auth/login");
 
   const course = await db.course.findUnique({
     where: {
@@ -30,7 +29,7 @@ const CourseIdPage = async ({
     },
   });
 
-  if (!course) return redirect("/search");
+  if (!course) return redirect("/api/auth/login");
 
   return  redirect(`/courses/${params.courseId}/chapters/${course.chapters[0].id}`);
 };

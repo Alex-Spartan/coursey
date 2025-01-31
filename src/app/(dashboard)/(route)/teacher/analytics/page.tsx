@@ -8,7 +8,7 @@ const page = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user) return redirect("/");
+  if (!user) return redirect("/api/auth/login");
 
   const { data, totalRevenue, totalSales } = await getAnalytics(user.id);
 

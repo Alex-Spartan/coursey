@@ -19,7 +19,7 @@ const CourseEnrollButton = ({
   const onClick = async () => {
     try {
         setIsLoading(true);
-        const response = await fetch(`/api/course/checkout`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/checkout`, {
           method: "POST",
           body: JSON.stringify({ courseId }),
         })

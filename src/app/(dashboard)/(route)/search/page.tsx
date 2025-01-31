@@ -18,7 +18,7 @@ const page = async ({
 } : SearchPageProps) => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  if (!user) return redirect("/");
+  if (!user) return redirect("/api/auth/login");
 
   const category = await db.category.findMany({
     orderBy: {

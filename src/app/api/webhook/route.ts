@@ -31,7 +31,6 @@ export async function POST(req: Request) {
     return new NextResponse("Missing Stripe signature", { status: 400 });
   }
 
-
   let event: Stripe.Event;
 
   try {

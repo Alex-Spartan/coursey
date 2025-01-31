@@ -21,7 +21,7 @@ const CourseAction = ({
 
   const onDelete = async () => {
     try {
-      const response = await fetch(`/api/course`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +41,7 @@ const CourseAction = ({
   };
   const publish = async () => {
     try {
-      const response = await fetch(`/api/course`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

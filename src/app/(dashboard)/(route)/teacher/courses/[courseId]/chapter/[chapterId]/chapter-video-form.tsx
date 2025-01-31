@@ -44,7 +44,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values: z.infer<typeof formSchema>) => {
     toggleEdit();
     try {
-      const response = await fetch(`/api/course/chapter/${chapterId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter/${chapterId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

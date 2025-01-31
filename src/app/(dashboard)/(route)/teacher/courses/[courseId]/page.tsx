@@ -42,7 +42,7 @@ const page = async ({
     },
   });
   if (!course) {
-    return redirect("/");
+    return redirect("/api/auth/login");
   }
 
   const category = await db.category.findMany({

@@ -4,10 +4,12 @@ import CourseItem from "../search/_components/course-item";
 import { CheckCircle, Clock } from "lucide-react";
 import InfoCard from "./_components/info-card";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const page = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+  if (!user) return redirect("/api/auth/login");
 
   const { coursesInProgress, completedCourses } = await getDashBoardCourses(user.id);
   
