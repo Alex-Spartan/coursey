@@ -25,7 +25,7 @@ const CourseItem = ({ courses }: CourseItemProps) => {
             chaptersLength={course.chapters.length}
             price={course.price!}
             progress={course.progress!}
-            category={course.category?.name}
+            category={course.category?.name || ""}
           />
         ))}
       </div>
