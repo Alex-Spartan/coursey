@@ -61,7 +61,7 @@ const page = async ({
   ];
   const totalFields = requiredFields.length;
   let filledFields;
-  const isBool = (item) => {
+  const isBool = (item: unknown) => {
     if (item !== null && item !== undefined) {
       return true;
     }
