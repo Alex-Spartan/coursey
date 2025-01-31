@@ -39,9 +39,9 @@ export async function POST(req: Request) {
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!,
     )
-  } catch (error: any) {
-    console.log(`⚠️  Webhook signature verification failed.`, error.message);
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+  } catch (error) {
+    console.log(`⚠️  Webhook signature verification failed.`, error);
+    return new NextResponse(`Webhook Error: ${error}`, { status: 400 });
   }
 
   try {
@@ -53,9 +53,9 @@ export async function POST(req: Request) {
       default:
         console.log(`Unhandled event type: ${event.type}`);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.log("Error processing webhook:", error);
-    return new NextResponse(`Webhook Error: ${error.message}`, { status: 400 });
+    return new NextResponse(`Webhook Error: ${error}`, { status: 400 });
   }
 
   return new NextResponse(null, { status: 200 });

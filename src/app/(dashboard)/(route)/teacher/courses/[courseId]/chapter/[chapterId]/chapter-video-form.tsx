@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import { useState } from "react";
@@ -37,7 +38,6 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     },
   });
 
-  const { isValid, isSubmitting } = form.formState;
 
   const toggleEdit = () => setIsEditing(!isEditing);
 

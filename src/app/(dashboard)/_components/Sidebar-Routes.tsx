@@ -29,7 +29,7 @@ const teacherRoutes = [
   },
 ];
 
-const sidebarRoutes = () => {
+const SidebarRoutes = () => {
   const pathname = usePathname();
 
   const isTeacherRoute = pathname?.startsWith("/teacher");
@@ -49,4 +49,4 @@ const sidebarRoutes = () => {
   </div>
 );
 };
-export default sidebarRoutes;
+export default SidebarRoutes;

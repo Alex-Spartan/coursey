@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/lib/prisma";
 import { Category, Chapter, Course } from "@prisma/client";
 import { getProgress } from "./get-progress";
