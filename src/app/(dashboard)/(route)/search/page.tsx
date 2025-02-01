@@ -5,7 +5,6 @@ import { getCourses } from "@/actions/get-courses"
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server"
 import { redirect } from "next/navigation"
 import CourseItem from "./_components/course-item"
-import { Suspense } from "react"
 
 interface SearchPageProps {
   searchParams: {
@@ -32,9 +31,7 @@ const page = async ({
   return (
     <>
     <div className="px-6 pt-6 md:hidden md:mb-0 block">
-    <Suspense fallback={<div>Loading...</div>}>
       <SearchInput />
-    </Suspense>
     </div>
     <div className="p-6 space-y-4">
       <Categories categories={category} />
