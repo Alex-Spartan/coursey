@@ -32,7 +32,7 @@ const page = async ({
   return (
     <>
     <div className="px-6 pt-6 md:hidden md:mb-0 block">
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
       <SearchInput />
     </Suspense>
     </div>
