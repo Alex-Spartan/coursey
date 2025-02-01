@@ -5,4 +5,4 @@
 
 */
 -- CreateIndex
-CREATE UNIQUE INDEX `Purchase_userId_courseId_key` ON `purchase`(`userId`, `courseId`);
+CREATE UNIQUE INDEX `Purchase_userId_courseId_key` ON `Purchase`(`userId`, `courseId`);
