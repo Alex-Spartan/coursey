@@ -18,7 +18,7 @@ const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
     pathname?.startsWith(`${href}/`);
 
   const onClick = () => {
-    router.push(href);
+    router.replace(href);
   };
   return (
     <button

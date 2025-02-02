@@ -81,8 +81,8 @@ export async function POST(req: NextRequest) {
             line_items,
             mode: 'payment',
             billing_address_collection: 'required',
-            success_url: `http://localhost:3000/courses/${courseId}?success=1`,
-            cancel_url: `http://localhost:3000/courses/${courseId}?cancel=1`,
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${courseId}?success=1`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/courses/${courseId}?cancel=1`,
             metadata: {
                 courseId: courseId,
                 userId: user.id
