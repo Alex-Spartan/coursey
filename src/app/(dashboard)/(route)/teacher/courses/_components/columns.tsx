@@ -44,7 +44,7 @@ export const columns: ColumnDef<Course>[] = [
     },
     cell: ({ row }) => {
       const price = row.getValue("price");
-      return price ? `$${price}` : "Free";
+      return price ? `₹${price}` : "Free";
     },
   },
   {

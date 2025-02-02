@@ -15,7 +15,7 @@ const DataCard = ({ label, value, shouldFormat }: DataCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-            {shouldFormat ? `$${value}` : value}
+            {shouldFormat ? `₹${value}` : value}
         </div>
       </CardContent>
     </Card>

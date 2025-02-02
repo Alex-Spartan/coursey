@@ -58,7 +58,7 @@ const CourseCard = ({
             />
           ) : (
             <p className='test-md md:test-sm font-medium text-slate-700'>
-              {price === 0 ? "Free" : `$${price}`}
+              {price === 0 ? "Free" : `₹${price}`}
             </p>
           )}
         </div>
