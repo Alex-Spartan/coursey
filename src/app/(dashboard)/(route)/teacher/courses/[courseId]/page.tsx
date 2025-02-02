@@ -17,6 +17,10 @@ import ChapterForm from "./_components/chapter-form";
 import Banner from "@/components/banner";
 import CourseAction from "./_components/course-actions-form";
 
+interface ChapterBool{
+  isPublished: boolean
+}
+
 const page = async ({
   params,
 }: {
@@ -62,10 +66,10 @@ const page = async ({
   const totalFields = requiredFields.length;
   let filledFields;
   const isBool = (item: unknown) => {
-    if (item !== null && item !== undefined) {
-      return true;
+    if (Array.isArray(item)) {
+      return item.some((chapter: ChapterBool) => chapter.isPublished);
     }
-    return false;
+    return item !== null && item !== undefined;
   };
   if (course.price === 0) {
     filledFields = requiredFields.filter(Boolean).length + 1;
