@@ -3,8 +3,8 @@ import { db } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import React from "react";
 import CourseSidebar from "./_components/course-sidebar";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import CourseNavbar from "./_components/course-navbar";
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 const CourseLayout = async ({
   children,
@@ -13,10 +13,8 @@ const CourseLayout = async ({
   children: React.ReactNode;
   params: { courseId: string };
 }) => {
-    let user = null;
-  // const { getUser } = getKindeServerSession();
-  // const user = await getUser();
-  // if (!user) return redirect('/api/auth/login');
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
 
   const course = await db.course.findUnique({
     where: {
