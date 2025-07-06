@@ -25,7 +25,7 @@ const CourseSidebar = async ({ course, progressCount }: CourseSidebarProps) => {
       where: {
         userId_courseId: {
           userId: user.id,
-          courseId: course.id,k
+          courseId: course.id,
         },
       },
     });
