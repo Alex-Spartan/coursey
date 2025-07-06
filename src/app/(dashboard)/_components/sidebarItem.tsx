@@ -2,20 +2,27 @@
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface SidebarItemProps {
   icon: LucideIcon;
   label: string;
   href: string;
+  auth?: boolean;
 }
 
-const SidebarItem = ({ icon: Icon, label, href }: SidebarItemProps) => {
+const SidebarItem = ({ icon: Icon, label, href, auth }: SidebarItemProps) => {
   const pathname = usePathname();
   const router = useRouter();
   const isActive =
-    (pathname === "/" && href === "/") ||
-    pathname === href ||
-    pathname?.startsWith(`${href}/`);
+  (pathname === "/" && href === "/") ||
+  pathname === href ||
+  pathname?.startsWith(`${href}/`);
+
+  useEffect(() => {
+    if (!auth) return router.replace("/search");
+  }, [auth])
+  
 
   const onClick = () => {
     router.replace(href);

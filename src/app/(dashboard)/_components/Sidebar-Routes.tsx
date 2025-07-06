@@ -8,6 +8,7 @@ const guestRoutes = [
     icon: Layout,
     label: "Dashboard",
     href: "/",
+    auth: "required",
   },
   {
     icon: Compass,
@@ -21,11 +22,13 @@ const teacherRoutes = [
     icon: List,
     label: "Courses",
     href: "/teacher/courses",
+    auth: "required",
   },
   {
     icon: BarChart,
     label: "Analytics",
     href: "/teacher/analytics",
+    auth: "required",
   },
 ];
 
@@ -43,6 +46,7 @@ const SidebarRoutes = () => {
         icon={route.icon}
         label={route.label}
         href={route.href}
+        auth={!!route.auth}
       />
     ))
   }

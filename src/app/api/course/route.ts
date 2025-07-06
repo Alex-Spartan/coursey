@@ -49,32 +49,13 @@ export async function DELETE(req: Request) {
             id: body.id,
         },
         include: {
-            chapters: {
-                include: {
-                    muxData: true,
-                }
-            },
+            chapters: true,
         }
     });
     if (!course) {
         return Response.json({ error: "Course not found" }, { status: 404 });
     }
 
-    for (const chapter of course.chapters) {
-        const existingMux = await db.muxData.findFirst({
-            where: {
-                chapterId: chapter.id,
-            }
-        });
-        if (existingMux) {
-            const deletedMux = await db.muxData.delete({
-                where: {
-                    chapterId: chapter.id,
-                }
-            });
-            console.log(deletedMux);
-        }
-    }
     const deletedChapters =await db.chapter.deleteMany({
         where: {
             courseId: course.id,

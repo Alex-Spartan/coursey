@@ -37,7 +37,6 @@ model Chapter {
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
   Course       Course         @relation(fields: [courseId], references: [id], onDelete: Cascade, map: "Chapter_courseId_fkey")
-  muxData      MuxData?
   userProgress UserProgress[]
 
   @@index([courseId], map: "Chapter_courseId_idx")
@@ -60,14 +59,6 @@ model Course {
   purchase    Purchase[]
 
   @@index([categoryId], map: "Course_categoryId_fkey")
-}
-
-model MuxData {
-  id         String  @id @default(cuid())
-  playbackId String?
-  assetId    String
-  chapterId  String  @unique(map: "MuxData_chapterId_key")
-  chapter    Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade, map: "MuxData_chapterId_fkey")
 }
 
 model Purchase {

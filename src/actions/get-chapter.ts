@@ -2,7 +2,7 @@ import { db } from "@/lib/prisma";
 import { Attachment, Chapter } from "@prisma/client";
 
 interface getChapterProps {
-    userId: string;
+    userId?: string | null;
     courseId: string;
     chapterId: string;
 }
@@ -13,14 +13,17 @@ export const getChapter = async ({
     chapterId,
 }: getChapterProps) => {
     try {
-        const purchase = await db.purchase.findUnique({
-            where: {
-                userId_courseId: {
-                    userId: userId,
-                    courseId: courseId
+        let purchase = null;
+        if (userId) {
+            purchase = await db.purchase.findUnique({
+                where: {
+                    userId_courseId: {
+                        userId: userId,
+                        courseId: courseId
+                    }
                 }
-            }
-        })
+            })
+        }
 
         const course = await db.course.findUnique({
             where: {
@@ -43,7 +46,6 @@ export const getChapter = async ({
             throw new Error("Chapter or Course not found");
         }
 
-        let muxData = null;
         let attachments: Attachment[] = [];
         let nextChapter: Chapter | null = null;
 
@@ -56,12 +58,6 @@ export const getChapter = async ({
         }
 
         if (chapter.isFree || purchase) {
-            muxData = await db.muxData.findUnique({
-                where: {
-                    chapterId: chapterId,
-                }
-            });
-
             nextChapter = await db.chapter.findFirst({
                 where: {
                     courseId: courseId,
@@ -76,17 +72,19 @@ export const getChapter = async ({
             });
         }
 
-        const userProgress = await db.userProgress.findFirst({
-            where: {
-                userId: userId,
-                chapterId: chapterId,
-            }
-        })
+        let userProgress = null;
+        if (userId) {
+             userProgress = await db.userProgress.findFirst({
+                where: {
+                    userId: userId,
+                    chapterId: chapterId,
+                }
+            })
+        }
 
         return {
             chapter,
             course,
-            muxData,
             attachments,
             nextChapter,
             userProgress,
@@ -98,7 +96,6 @@ export const getChapter = async ({
         return {
             chapter: null,
             course: null,
-            muxData: null,
             attachments: [],
             nextChapter: null,
             purchase: null,

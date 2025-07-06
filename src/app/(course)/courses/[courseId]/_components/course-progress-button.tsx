@@ -7,12 +7,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface CourseProgressButtonProps {
+  courseId: string;
   chapterId: string;
   nextChapterId?: string;
   isCompleted?: boolean;
 }
 
 const CourseProgressButton = ({
+  courseId,
   chapterId,
   nextChapterId,
   isCompleted,
@@ -37,7 +39,7 @@ const CourseProgressButton = ({
       setIsLoading(false);
 
       if (!isCompleted && nextChapterId) {
-          router.push(`/course/chapter/${nextChapterId}`);
+          router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
       }
 
       if (!response.ok) {

@@ -9,7 +9,7 @@ import { redirect } from "next/navigation";
 const page = async () => {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
-  if (!user) return redirect("/api/auth/login");
+  if (!user) return redirect("/search");
 
   const { coursesInProgress, completedCourses } = await getDashBoardCourses(user.id);
   

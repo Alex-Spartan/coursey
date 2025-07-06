@@ -1,9 +1,7 @@
 import { db } from "@/lib/prisma";
 import Categories from "./_components/categories";
 import SearchInput from "@/components/search-input";
-import { getCourses } from "@/actions/get-courses";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { redirect } from "next/navigation";
+import { getAllCourses } from "@/actions/get-courses";
 import CourseItem from "./_components/course-item";
 import { Suspense } from "react";
 
@@ -15,9 +13,8 @@ interface SearchPageProps {
 }
 
 const page = async ({ searchParams }: SearchPageProps) => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  if (!user) return redirect("/api/auth/login");
+ const courses = await getAllCourses({...searchParams });
+
 
   const category = await db.category.findMany({
     orderBy: {
@@ -25,7 +22,7 @@ const page = async ({ searchParams }: SearchPageProps) => {
     },
   });
 
-  const courses = await getCourses({ id: user.id, ...searchParams });
+
 
   return (
     <>
@@ -38,6 +35,7 @@ const page = async ({ searchParams }: SearchPageProps) => {
         <Categories categories={category} />
       </div>
       <div className="p-6">
+        <div>{}</div>
         <CourseItem courses={courses} />
       </div>
     </>

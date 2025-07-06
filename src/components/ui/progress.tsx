@@ -27,7 +27,8 @@ export interface ProgressProps extends React.HTMLAttributes<HTMLDivElement>, Var
 
 type CombinedProgressProps = ProgressProps & React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
 
-const Progress = React.forwardRef<
+const 
+Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   CombinedProgressProps
 >(({ className, value, variant, ...props }, ref) => (

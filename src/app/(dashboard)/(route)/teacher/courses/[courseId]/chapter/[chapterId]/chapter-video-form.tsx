@@ -6,17 +6,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
-import MuxPlayer from "@mux/mux-player-react";
 
 import { Button } from "@/components/ui/button";
 import { PlayCircle, PlusCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import FileUpload from "@/components/file-upload";
+import ReactPlayer from "react-player";
 
-import { Chapter, MuxData } from "@prisma/client";
+import { Chapter } from "@prisma/client";
 
 type ChapterVideoFormProps = {
-  initialData: Chapter & { muxData?: MuxData | null };
+  initialData: Chapter;
   courseId: string;
   chapterId: string;
 };
@@ -27,8 +27,11 @@ const formSchema = z.object({
   }),
 });
 
-
-const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
+const ChapterVideoForm = ({
+  initialData,
+  courseId,
+  chapterId,
+}: ChapterVideoFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -38,19 +41,23 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     },
   });
 
-
   const toggleEdit = () => setIsEditing(!isEditing);
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (
+    values: z.infer<typeof formSchema>
+  ) => {
     toggleEdit();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter/${chapterId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({...values, courseId}),
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/course/chapter/${chapterId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...values, courseId }),
+        }
+      );
       const chapter = await response.json();
       if (!response.ok) {
         toast.error(chapter.error);
@@ -62,7 +69,6 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       toast.error("An error occurred");
     }
   };
-
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -80,15 +86,15 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
         </Button>
       </div>
       {!isEditing ? (
-          !initialData.videoUrl ? (
-            <div className="flex items-center justify-center aspect-video mt-2">
-              <PlayCircle className="h-12 w-12 text-slate-500" />
-            </div>
-          ) : (
-            <div className="relative aspect-video mt-2">
-              <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
-            </div>
-          )
+        !initialData.videoUrl ? (
+          <div className="flex items-center justify-center aspect-video mt-2">
+            <PlayCircle className="h-12 w-12 text-slate-500" />
+          </div>
+        ) : (
+          <div className="relative aspect-video mt-2">
+            <ReactPlayer src={initialData.videoUrl}   style={{ width: '100%', height: 'auto', aspectRatio: '16/9' }}/>
+          </div>
+        )
       ) : (
         <div>
           <FileUpload
@@ -98,10 +104,13 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
                 onSubmit({ videoUrl: url });
               }
             }}
-            />
+          />
         </div>
       )}
-      <div className="text-sm italic text-slate-500">Uploading and processing video may take time. If video doesn&apos;t appear try refresing page</div>
+      <div className="text-sm italic text-slate-500">
+        Uploading and processing video may take time. If video doesn&apos;t
+        appear try refresing page
+      </div>
     </div>
   );
 };

@@ -7,11 +7,11 @@ const CourseIdPage = async ({
 }: {
   params: {
     courseId: string;
-  };
+  };k
 }) => {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-  if (!user) return redirect("/api/auth/login");
+  // const { getUser } = getKindeServerSession();
+  // const user = await getUser();
+  // if (!user) return redirect("/api/auth/login");
 
   const course = await db.course.findUnique({
     where: {

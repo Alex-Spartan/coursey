@@ -1,5 +1,4 @@
 import { Category, Course } from "@prisma/client";
-import { getProgress } from "./get-progress";
 import { db } from "@/lib/prisma";
 
 type CourseWithProgressWithCategory = Course & {
@@ -9,12 +8,13 @@ type CourseWithProgressWithCategory = Course & {
 };
 
 type GetCourses = {
-    id: string;
+    id?: string;
     title?: string;
     categoryId?: string;
-}
+};
 
-export const getCourses = async ({ id, title, categoryId }: GetCourses): Promise<CourseWithProgressWithCategory[]> => {
+// Fetch all published courses (optionally filtered by title/category)
+export const getAllCourses = async ({ title, categoryId }: Omit<GetCourses, "id">): Promise<CourseWithProgressWithCategory[]> => {
     try {
         const courses = await db.course.findMany({
             where: {
@@ -34,39 +34,19 @@ export const getCourses = async ({ id, title, categoryId }: GetCourses): Promise
                         id: true,
                     }
                 },
-                purchase: {
-                    where: {
-                        userId: id,
-                    }
-                }
             },
             orderBy: {
                 createdAt: 'desc',
             }
         });
-        
 
-        const coursesWithProgress: CourseWithProgressWithCategory[] = await Promise.all(
-            courses.map(async course => {
-                if (course.purchase.length === 0) {
-                    return {
-                        ...course,
-                        progress: null,
-                    }
-                }
-
-                const progressPercentage = await getProgress(id, course.id);
-
-                return {
-                    ...course,
-                    progress: progressPercentage,
-                }
-        })
-    );
-
-        return coursesWithProgress;
+        // No progress for all courses
+        return courses.map(course => ({
+            ...course,
+            progress: null,
+        }));
     } catch (error) {
         console.error(error);
         return [];
     }
-}
+};

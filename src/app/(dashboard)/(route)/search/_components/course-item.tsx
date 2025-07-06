@@ -9,7 +9,7 @@ type CourseWithProgressWtihCategory = Course & {
 };
 
 interface CourseItemProps {
-  courses: CourseWithProgressWtihCategory[];
+  courses: CourseWithProgressWtihCategory[] | [];
 }
 
 const CourseItem = ({ courses }: CourseItemProps) => {

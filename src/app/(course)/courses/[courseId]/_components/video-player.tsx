@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { cn } from "@/lib/utils";
-import MuxPlayer from "@mux/mux-player-react";
+import ReactPlayer from "react-player";
+import { ReactPlayerProps } from "react-player/types";
 import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 
@@ -41,13 +42,10 @@ const VideoPlayer = ({
         </div>
       )}
       {!isLocked && (
-        <MuxPlayer
-          title={title}
-          className={cn(!isReady && "hidden")}
-          onCanPlay={() => setIsReady(true)}
-          onEnded={() => {}}
-          // autoPlay
-          playbackId={playbackId}
+        <ReactPlayer
+          src={videoUrl}
+          style={{ width: "100%", height: "auto", aspectRatio: "16/9" }}
+          controls
         />
       )}
     </div>
